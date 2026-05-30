@@ -1,6 +1,10 @@
 import { useState } from "react";
 
+
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import API from "../services/api";
+
 
 import {
     Video,
@@ -14,6 +18,8 @@ import {
 
 import logo from "../assets/sparsh-logo.jpeg";
 
+
+
 function Dashboard(){
 
     const navigate = useNavigate();
@@ -23,6 +29,10 @@ function Dashboard(){
 
     const [isCreating, setIsCreating] =
         useState(false);
+
+    const [user, setUser] = useState(null);
+
+    const [loading, setLoading] = useState(true);
 
     const token =
         localStorage.getItem("token");
@@ -68,6 +78,76 @@ function Dashboard(){
         window.location.reload();
 
     };
+
+    useEffect(()=>{
+
+        const verifyUser = async()=>{
+
+            const token =
+                localStorage.getItem(
+                    "token"
+                );
+
+            if(!token){
+
+                navigate("/login");
+
+                return;
+
+            }
+
+            try{
+
+                const res =
+                    await API.get(
+                        "/auth/me",
+                        {
+                            headers:{
+                                Authorization:
+                                    `Bearer ${token}`
+                            }
+                        }
+                    );
+
+                setUser(
+                    res.data.user
+                );
+
+            }
+            catch{
+
+                localStorage.removeItem(
+                    "token"
+                );
+
+                navigate("/login");
+
+            }
+            finally{
+
+                setLoading(false);
+
+            }
+
+        };
+
+        verifyUser();
+
+    }, []);
+
+    if(loading){
+        return(
+
+            <div className="min-h-screen flex items-center justify-center bg-[#EAF4FF]">
+                <div className="flex flex-col items-center gap-4">
+                    <div className="w-12 h-12 border-4 border-[#B8D4FF] border-t-[#5B8DEF] rounded-full animate-spin" />
+                    <p className="text-[#5F6E8C]">
+                        Loading dashboard...
+                    </p>
+                </div>
+            </div>
+        );
+    }
 
     return(
 
@@ -137,6 +217,8 @@ function Dashboard(){
                         </div>
 
                     </div>
+
+                    
 
                     <h2 className="mt-14 text-5xl sm:text-6xl font-bold leading-tight text-[#1F2A44] max-w-[750px]">
 
@@ -262,6 +344,12 @@ function Dashboard(){
                     <div className="flex items-center gap-4">
 
                         <div>
+
+                            <p className="text-[#5F6E8C]">
+
+                                Welcome, {user?.name}
+
+                            </p>
 
                             <h2 className="text-3xl font-bold text-[#1F2A44]">
 
