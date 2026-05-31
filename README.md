@@ -111,44 +111,31 @@ SPARSH
 
 ### Landing Page
 
-```md
 ![Landing Page](client/public/landing.png)
-```
 
 ### Login Page
 
-```md
 ![Login Page](client/public/login.png)
-```
+
 ### Signup Page
 
-```md
 ![Signup Page](client/public/signup.png)
-```
 
 ### Dashboard
 
-```md
 ![Dashboard](client/public/dashboard.png)
-```
 
 ### Meeting Room
 
-```md
 ![Meeting Room](client/public/meeting.png)
-```
 
 ### Participants
 
-```md
 ![Meeting Room](client/public/participants.png)
-```
 
 ### Screen Sharing
 
-```md
 ![Meeting Room](client/public/screen-sharing.png)
-```
 
 
 ---
