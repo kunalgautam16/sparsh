@@ -38,8 +38,9 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: "https://sparsh-cig6.onrender.com//api",
-        methods: ["GET", "POST"]
+        origin: "https://sparsh-red.vercel.app",
+        methods: ["GET", "POST"],
+        credentials: true
     }
 });
 
