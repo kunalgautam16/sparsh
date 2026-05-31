@@ -16,15 +16,13 @@ const app = express();
 
 connectDB();
 
-const allowedOrigins = [
-    "http://localhost:5173",
-    "https://sparsh-git-main-kunalgautam16s-projects.vercel.app",
-    "https://sparsh-4vuq7a1wa-kunalgautam16s-projects.vercel.app"
-];
-
 app.use(cors({
-    origin: function(origin, callback){
-        if(!origin || allowedOrigins.includes(origin)){
+    origin: (origin, callback) => {
+        if(
+            !origin ||
+            origin === "http://localhost:5173" ||
+            origin.endsWith(".vercel.app")
+        ){
             callback(null, true);
         }else{
             callback(new Error("Not allowed by CORS"));
@@ -53,10 +51,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: [
-            "http://localhost:5173",
-            "https://sparsh-red.vercel.app"
-        ],
+        origin: true,
         methods: ["GET", "POST"],
         credentials: true
     }
