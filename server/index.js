@@ -16,7 +16,13 @@ const app = express();
 
 connectDB();
 
-app.use(cors());
+app.use(cors({
+    origin: [
+        "https://sparsh-red.vercel.app",
+        "https://sparsh-4uvq7a1wa-kunalgautam16s-projects.vercel.app"
+    ],
+    credentials: true
+}));
 
 app.use(express.json());
 
