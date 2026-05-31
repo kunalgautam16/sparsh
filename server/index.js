@@ -38,7 +38,10 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: "https://sparsh-red.vercel.app",
+        origin: [
+            "https://sparsh-red.vercel.app",
+            "https://sparsh-4uvq7a1wa-kunalgautam16s-projects.vercel.app"
+        ],
         methods: ["GET", "POST"],
         credentials: true
     }
