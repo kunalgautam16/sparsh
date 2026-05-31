@@ -73,9 +73,6 @@ function Room(){
     const [typingUser, setTypingUser] =
         useState("");
 
-    const [isRecording, setIsRecording] =
-        useState(false);
-
     const [isHost, setIsHost] =
         useState(false);
 
@@ -510,14 +507,6 @@ function Room(){
                 emoji,
                 username
             }
-        );
-
-    };
-
-    const toggleRecording = ()=>{
-
-        setIsRecording(
-            (prev)=>!prev
         );
 
     };
@@ -1118,18 +1107,6 @@ function Room(){
                     >
 
                         👏
-
-                    </button>
-
-
-                    <button
-                        onClick={
-                            toggleRecording
-                        }
-                        className="bg-[#FF4D6D] text-[#1F2A44] px-6 py-4 rounded-xl"
-                    >
-
-                        Record
 
                     </button>
 

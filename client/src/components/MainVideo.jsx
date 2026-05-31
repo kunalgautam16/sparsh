@@ -44,7 +44,7 @@ function MainVideo({
                 autoPlay
                 playsInline
                 muted
-                className="relative w-full h-[300px] lg:h-full object-cover scale-x-[-1]"
+                className="relative w-full h-[300px] lg:h-full object-cover"
             />
 
             {
