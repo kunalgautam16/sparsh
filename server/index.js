@@ -38,7 +38,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:5000/api",
+        origin: "https://sparsh-cig6.onrender.com//api",
         methods: ["GET", "POST"]
     }
 });

@@ -1,5 +1,5 @@
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:5000/api");
+const socket = io("https://sparsh-cig6.onrender.com//api");
 
 export default socket;
