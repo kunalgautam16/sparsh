@@ -17,10 +17,7 @@ const app = express();
 connectDB();
 
 app.use(cors({
-    origin: [
-        "https://sparsh-red.vercel.app",
-        "https://sparsh-4uvq7a1wa-kunalgautam16s-projects.vercel.app"
-    ],
+    origin: true,
     credentials: true
 }));
 
@@ -44,10 +41,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
     cors: {
-        origin: [
-            "https://sparsh-red.vercel.app",
-            "https://sparsh-4uvq7a1wa-kunalgautam16s-projects.vercel.app"
-        ],
+        origin: true,
         methods: ["GET", "POST"],
         credentials: true
     }
