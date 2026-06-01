@@ -14,7 +14,7 @@ function MainVideo({
 }){
 
     return(
-        <div className={`relative w-full h-[220px] sm:h-[280px] lg:h-[650px] rounded-[35px] overflow-hidden bg-black border-4 transition-all duration-300 ${
+        <div className={`relative w-full h-[220px] sm:h-[280px] h-[45vh] lg:h-[53vh] rounded-[35px] overflow-hidden bg-black border-4 transition-all duration-300 ${
             isSpeaking ?
             "border-yellow-300"
             :

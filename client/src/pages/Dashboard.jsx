@@ -174,7 +174,7 @@ function Dashboard(){
                 token &&
                 <button
                     onClick={logout}
-                    className="absolute top-6 right-6 bg-white/60 backdrop-blur-xl border border-[#B8D4FF] text-[#1F2A44] px-6 py-3 rounded-2xl hover:bg-white transition z-50 flex items-center gap-3"
+                    className="absolute top-6 right-6 bg-white/60 backdrop-blur-xl border border-[#B8D4FF] text-[#1F2A44] px-5 py-1.5 rounded-2xl hover:bg-white transition z-50 flex items-center gap-3"
                 >
 
                     <LogOut size={18} />
@@ -184,13 +184,13 @@ function Dashboard(){
                 </button>
             }
 
-            <div className="relative w-full max-w-[1400px] flex flex-col lg:flex-row items-center gap-12 z-10">
+            <div className="relative w-full max-w-[1400px] flex flex-col lg:flex-row items-center gap-10 z-10 scale-95 origin-top">
 
                 <div className="flex-1 flex flex-col justify-center">
 
                     <div className="flex items-center gap-5">
 
-                        <div className="w-24 h-24 rounded-full bg-white border border-[#B8D4FF] flex items-center justify-center overflow-hidden shrink-0">
+                        <div className="w-20 h-20 rounded-full bg-white border border-[#B8D4FF] flex items-center justify-center overflow-hidden shrink-0">
 
                             <img
                                 src={logo}
@@ -202,7 +202,7 @@ function Dashboard(){
 
                         <div>
 
-                            <h1 className="text-6xl sm:text-7xl font-black text-[#1F2A44] tracking-wide shimmer-text">
+                            <h1 className="text-5xl sm:text-6xl font-black text-[#1F2A44] tracking-wide shimmer-text">
 
                                 SPARSH
 
@@ -220,13 +220,13 @@ function Dashboard(){
 
                     
 
-                    <h2 className="mt-14 text-5xl sm:text-6xl font-bold leading-tight text-[#1F2A44] max-w-[750px]">
+                    <h2 className="mt-10 text-4xl sm:text-5xl font-bold leading-tight text-[#1F2A44] max-w-[700px]">
 
                         Realtime collaboration built for modern interactive meetings
 
                     </h2>
 
-                    <p className="mt-8 text-[#5F6E8C] text-xl leading-relaxed max-w-[650px]">
+                    <p className="mt-6 text-[#5F6E8C] text-lg leading-relaxed max-w-[650px]">
 
                         Experience realtime meetings with live subtitles,
                         gesture reactions, participant moderation,
@@ -339,7 +339,7 @@ function Dashboard(){
 
                 </div>
 
-                <div className="w-full max-w-[480px] bg-white/50 backdrop-blur-2xl border border-[#B8D4FF] rounded-[40px] p-8 shadow-[0_20px_60px_rgba(91,141,239,0.15)]">
+                <div className="w-full max-w-[420px] bg-white/50 backdrop-blur-2xl border border-[#B8D4FF] rounded-[40px] p-6 shadow-[0_20px_60px_rgba(91,141,239,0.15)]">
 
                     <div className="flex items-center gap-4">
 
@@ -395,7 +395,7 @@ function Dashboard(){
                             isCreating ||
                             name.trim()===""
                         }
-                        className="w-full mt-10 bg-[#5B8DEF] text-white font-bold py-5 rounded-xl text-xl hover:scale-[1.02] hover:bg-[#74A9FF] transition disabled:opacity-60"
+                        className="w-full mt-8 bg-[#5B8DEF] text-white font-bold py-4 rounded-xl text-lg hover:scale-[1.02] hover:bg-[#74A9FF] transition disabled:opacity-60"
                     >
 
                         {
