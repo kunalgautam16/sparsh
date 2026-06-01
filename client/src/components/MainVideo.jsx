@@ -14,7 +14,7 @@ function MainVideo({
 }){
 
     return(
-        <div className={`relative w-full h-full rounded-[35px] overflow-hidden bg-[#3b3b3b] border-4 transition-all duration-300 ${
+        <div className={`relative w-full h-[220px] sm:h-[280px] lg:h-[650px] rounded-[35px] overflow-hidden bg-black border-4 transition-all duration-300 ${
             isSpeaking ?
             "border-yellow-300"
             :
@@ -44,7 +44,7 @@ function MainVideo({
                 autoPlay
                 playsInline
                 muted
-                className="relative w-full h-[300px] lg:h-full object-cover"
+                className="w-full h-full object-contain"
             />
 
             {
@@ -99,7 +99,7 @@ function MainVideo({
 
             {
                 subtitle &&
-                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-black/75 text-white px-8 py-4 rounded-xl max-w-[75%] text-center border border-white/10">
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/80 text-white px-5 py-3 rounded-2xl max-w-[85%] text-center backdrop-blur-md">
 
                     <p className="text-lg sm:text-2xl font-medium leading-relaxed">
 

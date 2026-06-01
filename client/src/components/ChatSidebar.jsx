@@ -7,7 +7,8 @@ function ChatSidebar({
     sendMessage,
     handleTyping,
     typingUser,
-    isSending
+    isSending,
+    onClose
 }){
 
     return(
@@ -113,6 +114,16 @@ function ChatSidebar({
                     </p>
 
                 </div>
+            }
+
+            {
+                onClose &&
+                <button
+                    onClick={onClose}
+                    className="lg:hidden bg-[#5B8DEF] text-[#2B3050] px-4 py-2 rounded-xl font-semibold"
+                >
+                    Close
+                </button>
             }
 
             <div className="flex gap-3 mt-4 shrink-0">

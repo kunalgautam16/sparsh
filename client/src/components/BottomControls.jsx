@@ -17,11 +17,11 @@ function BottomControls({
 }){
 
     return(
-        <div className="bg-[#CFE3FF] rounded-xl px-10 py-5 flex items-center justify-center gap-5 sm:gap-10 lg:gap-16 border border-[#B8D4FF]">
+        <div className="bg-[#CFE3FF] rounded-xl px-3 py-2 lg:px-10 lg:py-5 flex items-center justify-center gap-4 lg:gap-16 border border-[#B8D4FF]">
 
             <button
                 onClick={toggleMic}
-                className="flex items-center gap-3 text-[#1F2A44] text-lg hover:scale-105 transition"
+                className="flex items-center gap-2 text-[#1F2A44] text-base lg:text-lg hover:scale-105 transition"
             >
                 {
                     isMuted ?
@@ -41,7 +41,7 @@ function BottomControls({
 
             <button
                 onClick={toggleVideo}
-                className="flex items-center gap-3 text-[#1F2A44] text-lg hover:scale-105 transition"
+                className="flex items-center gap-2 text-[#1F2A44] text-base lg:text-lg hover:scale-105 transition"
             >
                 {
                     isVideoOff ?
@@ -61,7 +61,7 @@ function BottomControls({
 
             <button
                 onClick={shareScreen}
-                className="flex items-center gap-3 text-[#1F2A44] text-lg hover:scale-105 transition"
+                className="flex items-center gap-2 text-[#1F2A44] text-base lg:text-lg hover:scale-105 transition"
             >
                 <MonitorUp />
 

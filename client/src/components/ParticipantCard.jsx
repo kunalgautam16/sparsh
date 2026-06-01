@@ -39,7 +39,7 @@ function ParticipantCard({
                 scale: 1.02
             }}
 
-            className={`relative bg-[#CFE3FF] rounded-[28px] overflow-hidden h-[180px] sm:h-[220px] border transition-all duration-300 cursor-pointer ${
+            className={`relative bg-[#CFE3FF] rounded-[28px] overflow-hidden h-[100px] w-[160px] shrink-0 lg:w-auto lg:h-[220px] border transition-all duration-300 cursor-pointer ${
                 isSpeaking ?
                 "border-[#A9BCFF]"
                 :
@@ -73,7 +73,7 @@ function ParticipantCard({
 
                 <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#31375B] to-[#2B3050] text-[#1F2A44]">
 
-                    <div className={`w-24 h-24 rounded-xl bg-[#5B8DEF] text-[#2B3050] flex items-center justify-center text-5xl font-bold transition-all duration-300 ${
+                    <div className={`w-12 h-12 lg:w-24 lg:h-24 rounded-xl bg-[#5B8DEF] text-[#2B3050] flex items-center justify-center text-5xl font-bold transition-all duration-300 ${
                         isSpeaking &&
                         "scale-110 ring-4 ring-[#D9DCEE]"
                     }`}>

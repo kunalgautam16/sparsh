@@ -10,7 +10,7 @@ import ParticipantCard from "../components/ParticipantCard";
 import ChatSidebar from "../components/ChatSidebar";
 import BottomControls from "../components/BottomControls";
 import GesturePopup from "../components/GesturePopup";
-import { X } from "lucide-react";
+import { X,MessageSquare } from "lucide-react";
 
 function Room(){
 
@@ -93,6 +93,9 @@ function Room(){
     );
 
     const [isSending, setIsSending] =
+    useState(false);
+
+    const [showChat, setShowChat] =
     useState(false);
 
 
@@ -344,6 +347,66 @@ function Room(){
 
             }
         );
+        socket.on("user-left", (peerId)=>{
+
+            setRemoteStreams((prev)=>
+                prev.filter(
+                    (user)=>
+                        user.peerId !== peerId
+                )
+            );
+
+            if(peersRef.current[peerId]){
+
+                peersRef.current[peerId].close();
+
+                delete peersRef.current[peerId];
+
+            }
+
+        });
+        socket.on(
+    "force-mute",
+        ()=>{
+
+            localStreamRef.current
+                ?.getAudioTracks()
+                .forEach(
+                    (track)=>{
+
+                        track.enabled =
+                            false;
+
+                    }
+                );
+
+            setIsMuted(true);
+
+        }
+    );
+
+        socket.on(
+            "kicked",
+            ()=>{
+
+                alert(
+                    "You were removed by the host"
+                );
+
+                localStreamRef.current
+                    ?.getTracks()
+                    .forEach(
+                        (track)=>
+                            track.stop()
+                    );
+
+                peerRef.current?.destroy();
+
+                window.location.href =
+                    "/dashboard";
+
+            }
+        );
 
         return ()=>{
 
@@ -354,6 +417,7 @@ function Room(){
             socket.off("receive-subtitle");
             socket.off("typing");
             socket.off("emoji-reaction");
+            socket.off("user-left");
 
             localStreamRef.current
             ?.getTracks()
@@ -395,31 +459,58 @@ function Room(){
 
         recognition.continuous = true;
 
-        recognition.interimResults = false;
+        recognition.interimResults = true;
 
         recognition.lang = "en-US";
 
         recognition.onresult = (event)=>{
 
-            const latestResult =
+            let transcript = "";
+
+            for(
+                let i = event.resultIndex;
+                i < event.results.length;
+                i++
+            ){
+
+                transcript +=
+                    event.results[i][0].transcript;
+
+            }
+
+            setSubtitle(transcript);
+
+            const latest =
                 event.results[
                     event.results.length - 1
                 ];
 
-            const transcript =
-                latestResult[0].transcript;
+            if(latest.isFinal){
 
-            setSubtitle(transcript);
+                socket.emit(
+                    "subtitle",
+                    {
+                        roomId: id,
+                        subtitle: transcript
+                    }
+                );
 
-            socket.emit(
-                "subtitle",
-                {
-                    roomId: id,
-                    subtitle: transcript
-                }
-            );
+            }
 
         };
+
+        recognition.onend = ()=>{
+
+            try{
+
+                recognition.start();
+
+            }
+            catch(error){}
+
+        };
+
+        recognition.onerror = ()=>{};
 
         recognition.start();
 
@@ -429,7 +520,7 @@ function Room(){
 
         };
 
-    }, []);
+    }, [id]);
 
     const sendMessage = ()=>{
 
@@ -741,7 +832,7 @@ function Room(){
 
         return(
             <div className="w-full h-screen flex items-center justify-center bg-[#EAF4FF]">
-                <div className="flex flex-col items-center gap-5">
+                <div className="flex flex-col items-center gap-4">
                     <div className="w-16 h-16 border-4 border-[#B8D4FF] border-t-[#5B8DEF] rounded-full animate-spin" />
                     <p className="text-[#1F2A44] text-2xl font-semibold">
                         Joining Meeting...
@@ -852,26 +943,6 @@ function Room(){
                                                     onClick={()=>{
 
                                                         socket.emit(
-                                                            "mute-user",
-                                                            {
-                                                                roomId: id,
-                                                                targetPeerId:
-                                                                    user.peerId
-                                                            }
-                                                        );
-
-                                                    }}
-                                                    className="bg-[#5B8DEF] text-[#2B3050] px-4 py-2 rounded-xl font-semibold hover:scale-105 transition"
-                                                >
-
-                                                    Mute
-
-                                                </button>
-
-                                                <button
-                                                    onClick={()=>{
-
-                                                        socket.emit(
                                                             "kick-user",
                                                             {
                                                                 roomId: id,
@@ -901,12 +972,31 @@ function Room(){
 
                 </div>
             }
+            {
+                showChat &&
+                <div className="fixed inset-0 z-[130] bg-[#EAF4FF] lg:hidden p-4">
+
+                    <ChatSidebar
+                        messages={messages}
+                        message={message}
+                        setMessage={setMessage}
+                        sendMessage={sendMessage}
+                        handleTyping={handleTyping}
+                        typingUser={typingUser}
+                        isSending={isSending}
+                        onClose={()=>
+                            setShowChat(false)
+                        }
+                    />
+
+                </div>
+            }
 
             <div className="w-full h-screen bg-[#EAF4FF] p-3 lg:p-5 flex flex-col gap-5 overflow-hidden">
 
                 <div className="flex flex-col lg:flex-row gap-5 flex-1 overflow-hidden">
 
-                    <div className="w-full lg:w-[22%] h-[320px] lg:h-full">
+                    <div className="hidden lg:block lg:w-[22%]">
 
                         <ChatSidebar
                             messages={messages}
@@ -920,7 +1010,7 @@ function Room(){
 
                     </div>
 
-                    <div className="flex-1 flex flex-col gap-5 relative overflow-hidden min-h-0">
+                    <div className="flex-1 flex flex-col gap-2 lg:gap-5 relative overflow-hidden min-h-0">
 
                         <GesturePopup
                             gesture={
@@ -933,7 +1023,7 @@ function Room(){
 
                         {
                             emojiReaction &&
-                            <div className="absolute top-24 right-10 bg-[#CFE3FF] border border-[#B8D4FF] text-[#1F2A44] px-6 py-4 rounded-xl z-50 text-3xl">
+                            <div className="absolute top-24 right-10 bg-[#CFE3FF] border border-[#B8D4FF] text-[#1F2A44] px-3 py-2 lg:px-6 lg:py-4 rounded-xl z-50 text-3xl">
 
                                 {
                                     emojiReaction.emoji
@@ -957,7 +1047,7 @@ function Room(){
                             />
                         }
 
-                        <div className="flex-1 overflow-hidden">
+                        <div className="overflow-hidden">
 
                             <MainVideo
                                 stream={stream}
@@ -973,7 +1063,7 @@ function Room(){
 
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 overflow-y-auto pr-2 max-h-[200px]">
+                        <div className="flex gap-2 overflow-x-auto overflow-y-hidden pb-2 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:gap-4 lg:overflow-y-auto lg:pr-2 lg:max-h-none">
                             
                             {
                                 remoteStreams.length === 0 &&
@@ -1041,7 +1131,21 @@ function Room(){
 
                 </div>
 
-                <div className="flex flex-wrap justify-center items-center gap-4 flex-wrap bg-[#DCEEFF] py-4 px-3 rounded-t-3xl w-full border border-[#B8D4FF]">
+                <div className="
+                    flex
+                    flex-wrap
+                    justify-center
+                    items-center
+                    gap-2
+                    sm:gap-4
+                    bg-[#DCEEFF]
+                    py-3
+                    px-2
+                    rounded-t-3xl
+                    w-full
+                    border
+                    border-[#B8D4FF]
+                    ">
 
                     <BottomControls
                         shareScreen={shareScreen}
@@ -1061,7 +1165,7 @@ function Room(){
                                     !prev
                             )
                         }
-                        className="bg-[#CFE3FF] text-[#1F2A44] border border-[#B8D4FF] px-6 py-4 rounded-xl"
+                        className="bg-[#CFE3FF] text-[#1F2A44] border border-[#B8D4FF] px-3 py-2 lg:px-6 lg:py-4 rounded-xl"
                     >
 
                         Participants
@@ -1072,7 +1176,7 @@ function Room(){
                         onClick={
                             copyMeetingLink
                         }
-                        className="bg-[#CFE3FF] text-[#1F2A44] border border-[#B8D4FF] px-6 py-4 rounded-xl"
+                        className="bg-[#CFE3FF] text-[#1F2A44] border border-[#B8D4FF] px-3 py-2 lg:px-6 lg:py-4 rounded-xl"
                     >
 
                         Invite
@@ -1080,8 +1184,21 @@ function Room(){
                     </button>
 
                     <button
+                        onClick={()=>
+                            setShowChat(true)
+                        }
+                        className="bg-[#CFE3FF] text-[#1F2A44] border border-[#B8D4FF] px-3 py-2 lg:px-6 lg:py-4 rounded-xl flex items-center gap-2 lg:hidden"
+                    >
+
+                        <MessageSquare size={18} />
+
+                        Chat
+
+                    </button>
+
+                    <button
                         onClick={handleRaiseHand}
-                        className="w-20 h-20 rounded-full bg-[#5B8DEF] text-[#1F2235] text-4xl flex items-center justify-center -mt-10 border-[6px] border-[#1F2235] hover:scale-110 transition"
+                        className="w-14 h-14 lg:w-20 lg:h-20 rounded-full bg-[#5B8DEF] text-[#1F2235] text-2xl lg:text-4xl flex items-center justify-center -mt-4 lg:-mt-10 border-[4px] lg:border-[6px] border-[#1F2235] hover:scale-110 transition"
                     >
 
                         ✋
@@ -1092,7 +1209,7 @@ function Room(){
                         onClick={()=>
                             sendReaction("🔥")
                         }
-                        className="bg-[#CFE3FF] text-[#1F2A44] border border-[#B8D4FF] px-6 py-4 rounded-full text-2xl"
+                        className="bg-[#CFE3FF] text-[#1F2A44] border border-[#B8D4FF] px-3 py-2 lg:px-6 lg:py-4 rounded-full text-2xl"
                     >
 
                         🔥
@@ -1103,7 +1220,7 @@ function Room(){
                         onClick={()=>
                             sendReaction("👏")
                         }
-                        className="bg-[#CFE3FF] text-[#1F2A44] border border-[#B8D4FF] px-6 py-4 rounded-full text-2xl"
+                        className="bg-[#CFE3FF] text-[#1F2A44] border border-[#B8D4FF] px-3 py-2 lg:px-6 lg:py-4 rounded-full text-2xl"
                     >
 
                         👏
@@ -1114,7 +1231,7 @@ function Room(){
                         onClick={
                             leaveMeeting
                         }
-                        className="bg-[#FF4D6D] text-[#1F2A44] px-6 py-4 rounded-xl"
+                        className="bg-[#FF4D6D] text-[#1F2A44] px-3 py-2 lg:px-6 lg:py-4 rounded-xl"
                     >
 
                         Leave
